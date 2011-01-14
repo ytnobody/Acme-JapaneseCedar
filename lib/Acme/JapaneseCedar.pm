@@ -5,8 +5,8 @@ use vars qw( $VERSION @EXPORT );
 $VERSION = '0.01';
 
 use Class::InsideOut qw/ private register id /;
+use Data::Dumper;
 use DateTime;
-use PadWalker qw/ peek_my /;
 use Time::HiRes qw/ sleep /;
 use POSIX qw/ ceil /;
 use Exporter qw/ import /;
@@ -20,15 +20,14 @@ private sleepin => my %sleepin;
 
 sub new {
     my $class = shift;
-    my $self = \( my $scalar );
-    bless $self, $class;
+    my $self = bless \( my $scalar ), $class;
+    register( $self );
     $doy{ id $self } = DateTime->from_epoch( epoch => time() )->day_of_year;
     $age{ id $self } = $self->_rand_age;
     $wakeup{ id $self } = 37 + int(rand(15));
     $sleepin{ id $self } = 131 + int(rand(15));
     $self->_set_ascus;
     $self->_blast;
-    register( $self );
     return $self;
 }
 
@@ -66,8 +65,8 @@ sub _air {
     \$Atmosphere::air;
 }
 
-sub _peek {
-    return peek_my(1);
+sub _vanish {
+
 }
 
 sub _wane {
@@ -77,6 +76,7 @@ sub _wane {
         warn "'Ummm, Ummm, Ummm!'\n";
         sleep sprintf( '%0.04f', ( $age{ id $self } / $$item ) );
         $self->_blast for 1 .. $$item;
+        $self->_vanish;
     }
     else {
         warn "Couldn't felling it.\n";
