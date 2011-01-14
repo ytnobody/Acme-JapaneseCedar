@@ -6,6 +6,7 @@ $VERSION = '0.01';
 
 use Class::InsideOut qw/ private register id /;
 use DateTime;
+use PadWalker qw/ peek_my /;
 use Time::HiRes qw/ sleep /;
 use POSIX qw/ ceil /;
 use Exporter qw/ import /;
@@ -28,6 +29,7 @@ sub new {
     $self->_set_ascus;
     $self->_blast;
     register( $self );
+    return $self;
 }
 
 sub _blast {
@@ -62,6 +64,10 @@ sub _air {
     no warnings;
     $Atomosphere::air ||= [];
     \$Atmosphere::air;
+}
+
+sub _peek {
+    return peek_my(1);
 }
 
 sub _wane {

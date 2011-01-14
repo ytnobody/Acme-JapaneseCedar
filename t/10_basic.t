@@ -5,9 +5,9 @@ use Data::Dumper;
 my $sugi = Acme::JapaneseCedar->new;
 isa_ok $sugi, 'Acme::JapaneseCedar';
 
-warn Dumper( $sugi );
+warn Dumper( $sugi->_peek );
 
-felling( $sugi, axe );
+# felling( $sugi, axe );
 
-is $sugi, undef;
-warn Dumper( $Atmosphere::air );
+# is $sugi, undef;
+# warn Dumper( $Atmosphere::air );
