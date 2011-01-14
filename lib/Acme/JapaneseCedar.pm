@@ -1,62 +1,65 @@
 package Acme::JapaneseCedar;
-use strict;
-use warnings;
+use Mouse;
 use vars qw( $VERSION @EXPORT );
 $VERSION = '0.01';
 
-use Class::InsideOut qw/ private register id /;
-use Data::Dumper;
 use DateTime;
 use Time::HiRes qw/ sleep /;
 use POSIX qw/ ceil /;
-use Exporter qw/ import /;
-@EXPORT = qw/ felling axe saw /;
 
-private ascus => my %ascus;
-private age => my %age;
-private doy => my %doy;
-private wakeup => my %wakeup;
-private sleepin => my %sleepin;
+{
+    package UNIVERSAL;
+    use Class::Method::Modifiers;
+    use Acme::Sneeze::JP;
+    before qw/ sneeze / => sub {
+        warn "Achoo!!\n";
+    };
+}
 
-sub new {
-    my $class = shift;
-    my $self = bless \( my $scalar ), $class;
-    register( $self );
-    $doy{ id $self } = DateTime->from_epoch( epoch => time() )->day_of_year;
-    $age{ id $self } = $self->_rand_age;
-    $wakeup{ id $self } = 37 + int(rand(15));
-    $sleepin{ id $self } = 131 + int(rand(15));
+has ascus => ( is => 'rw' );
+has age => ( is => 'rw' );
+has doy => ( is => 'rw' );
+has wakeup => ( is => 'rw' );
+has sleepin => ( is => 'rw' );
+
+sub BUILD {
+    my $self = shift;
+    $self->wakeup( 10 + int(rand(40)) );
+    $self->sleepin( 131 + int(rand(15)) );
+    $self->doy( DateTime->from_epoch( epoch => time() )->day_of_year );
+    $self->_rand_age;
     $self->_set_ascus;
     $self->_blast;
-    return $self;
 }
 
 sub _blast {
     my $self = shift;
     my $blasted = $self->_blast_force;
-    $blasted = $blasted > $ascus{ id $self } ? $ascus{ id $self } : $blasted;
-    $ascus{ id $self } -= $blasted;
+    $blasted = $blasted > $self->ascus ? $self->ascus : $blasted;
+    $self->ascus( $self->ascus - $blasted );
     my $pollens = $blasted * ceil(rand(30)+3);
     my $air = $self->_air;
     push @{ $$air }, 'pollen of japanese cedar' for 1 .. $pollens;
+    sleep 0.3;
+    warn "Oh no! Pollens were discharges into atmosphere air!\n" if $pollens;
 }
 
-sub _rand_age { $age{ id shift } = ceil(rand(20)) * ceil(rand(10)) }
+sub _rand_age { shift->age = ceil(rand(20)) * ceil(rand(10)) }
 
 sub _set_ascus { 
     my $self = shift;
-    $ascus{ id $self } = abs( 60 - ( $age{ id $self } - 60 ) + int(rand(100)) ) if $age{ id $self } > 25;
-    $ascus{ id $self } = 0 unless $ascus{ id $self };
+    $self->ascus = abs( 60 - ( $self->age - 60 ) + int(rand(100)) ) if $self->age > 25;
+    $self->ascus = 0 unless $self->ascus;
 }
 
 sub _blast_force {
     my $self = shift;
-    ceil( (abs 40 - ($doy{ id $self } - 65) ) / 10 ) if $self->_is_blastable;
+    ceil( (abs 40 - ($self->doy - 65) ) / 10 ) if $self->_is_blastable;
 }
 
 sub _is_blastable {
     my $self = shift;
-    my $is_spring = $doy{ id $self } >= $wakeup{ id $self } && $doy{ id $self } <= $sleepin{ id $self } ? 1 : 0;
+    my $is_spring = $self->doy >= $self->wakeup && $self->doy <= $self->sleepin ? 1 : 0;
 }
 
 sub _air {
@@ -65,33 +68,11 @@ sub _air {
     \$Atmosphere::air;
 }
 
-sub _vanish {
-
+sub DEMOLISH {
+    my $self = shift;
+    my $rolls = int( $self->age / 5 );
+    $self->_blast for 1 .. $rolls;
 }
-
-sub _wane {
-    my ( $self, $item ) = @_;
-    my $type = ref $item;
-    if ( $type =~ /(Axe|Saw)/ ) {
-        warn "'Ummm, Ummm, Ummm!'\n";
-        sleep sprintf( '%0.04f', ( $age{ id $self } / $$item ) );
-        $self->_blast for 1 .. $$item;
-        $self->_vanish;
-    }
-    else {
-        warn "Couldn't felling it.\n";
-    }
-}
-
-sub felling {
-    my ( $target, $item ) = @_;
-    $target->_wane( $item );
-    $target = undef;
-}
-
-sub axe { my $num = 20; bless \$num, 'Axe' };
-
-sub saw { my $num = 10; bless \$num, 'Saw' };
 
 1;
 __END__
