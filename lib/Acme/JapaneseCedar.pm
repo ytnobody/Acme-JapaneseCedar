@@ -1,6 +1,6 @@
 package Acme::JapaneseCedar;
 use Mouse;
-use vars qw( $VERSION @EXPORT );
+use vars qw( $VERSION );
 $VERSION = '0.01';
 
 use DateTime;
