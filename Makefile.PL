@@ -3,7 +3,6 @@ name 'Acme-JapaneseCedar';
 all_from 'lib/Acme/JapaneseCedar.pm';
 
 requires 'Mouse' => 0.72;
-requires 'Class::Method::Modifiers';
 requires 'DateTime';
 requires 'Time::HiRes';
 requires 'POSIX';
