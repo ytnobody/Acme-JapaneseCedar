@@ -84,6 +84,8 @@ sub DEMOLISH {
     warn "Okey! This japanese cedar were felled!\n";
 }
 
+no Mouse;
+
 1;
 __END__
 
