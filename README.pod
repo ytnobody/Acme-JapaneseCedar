@@ -1,4 +1,6 @@
 
+=encoding utf8
+
 =head1 NAME
 
 Acme::JapaneseCedar - 杉の木です。
