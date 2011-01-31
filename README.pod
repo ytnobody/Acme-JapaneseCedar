@@ -1,0 +1,43 @@
+
+=head1 NAME
+
+Acme::JapaneseCedar - 杉の木です。
+
+=head1 SYNOPSIS
+
+杉の木を植えるには、Acme::JapaneseCedarのインスタンスを生成します。
+
+  use Acme::JapaneseCedar;
+  
+  # もし春なら、この時点で花粉がすこしバラ撒かれます。
+  my $sugi = Acme::JapaneseCedar->new;
+  
+  # 大気の様子は、$Atmosphere::airに格納されます。
+  print $_ for @$Atmosphere::air;
+
+この杉の木をDESTROYするには、きこりによる伐採作業が必要なため、少々時間がかかります。
+
+しかも、切り倒した時にも花粉を大量にバラ撒いてきます。
+
+このドキュメントを書いてるだけでも鼻がむずむずしてきました。。。
+
+=head1 DESCRIPTION
+
+Perlで実装された杉です。日本人ならご存知の、春になると花粉をバラ撒く鬱陶しい木です。花粉症の身としては、全部ブッタ切ってやりたいところです。
+
+実際に杉の木を切り倒すには、法規や環境、さらには体力等など、色々と問題があって実現できないわけですが、Perlでやる分には自由です。
+
+Larry WallとPerlハッカー諸氏、そしてリャマに感謝しつつ、存分に杉の木をブッタ切りましょう。
+
+=head1 AUTHOR
+
+azuma satoshi E<lt>ytnobody@gmail.comE<gt>
+
+=head1 SEE ALSO
+
+=head1 LICENSE
+
+This library is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
+
+=cut
